@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 """
-Gather data from an API and export to CSV
+Gather data from an API
 """
 
-import csv
-import requests
 import sys
-import os
+import requests
 
 def fetch_employee_data(employee_id):
     """
@@ -31,50 +29,25 @@ def fetch_employee_data(employee_id):
     # Calculate progress
     total_tasks = len(todo_data)
     completed_tasks = sum(1 for task in todo_data if task.get('completed'))
-    completed_tasks_info = [(employee_id, employee_name, task.get('completed'), task.get('title')) for task in todo_data]
+    completed_titles = [task.get('title') for task in todo_data if task.get('completed')]
 
-    return completed_tasks_info
-
-def export_to_csv(employee_id, data):
-    """
-    Exports data to a CSV file.
-    
-    Args:
-        employee_id (int): The ID of the employee.
-        data (list): List of tuples containing task information.
-    """
-    filename = f"{employee_id}.csv"
-    with open(filename, 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-        csv_writer.writerows(data)
-
-def user_info(id):
-    """
-    Displays user info and checks number of tasks in CSV file.
-    
-    Args:
-        id (int): The ID of the employee.
-    """
-    try:
-        with open(str(id) + ".csv", 'r') as f:
-            num_tasks = sum(1 for line in f) - 1  # Subtract header row
-        print(f"Number of tasks in CSV: {num_tasks} - OK")
-    except FileNotFoundError:
-        print(f"CSV file for user {id} not found.")
+    return employee_name, completed_tasks, total_tasks, completed_titles
 
 def main():
     """
     Main function to handle command line arguments and display output.
     """
     if len(sys.argv) != 2:
-        print("Usage: python3 1-export_to_CSV.py <employee_id>")
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
-    completed_tasks_info = fetch_employee_data(employee_id)
-    export_to_csv(employee_id, completed_tasks_info)
-    user_info(employee_id)
+    employee_name, completed_tasks, total_tasks, completed_titles = fetch_employee_data(employee_id)
+
+    print(f"Employee {employee_name} is done with tasks ({completed_tasks}/{total_tasks}):")
+    for title in completed_titles:
+        print(f"\t{title}")
 
 if __name__ == "__main__":
     main()
+
