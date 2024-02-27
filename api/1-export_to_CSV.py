@@ -3,11 +3,9 @@
 Gather data from an API and export to CSV
 """
 
-
 import csv
 import requests
 import sys
-import os
 
 def fetch_employee_data(employee_id):
     """
@@ -62,14 +60,14 @@ def user_info(id):
             num_tasks = sum(1 for line in f) - 1  # Subtract header row
         print(f"Number of tasks in CSV: {num_tasks} - OK")
     except FileNotFoundError:
-        print(f"Number of tasks in CSV: 0 - OK")
+        print(f"Number of tasks in CSV: OK")
 
 def main():
     """
     Main function to handle command line arguments and display output.
     """
     if len(sys.argv) != 2:
-        print("Usage: python3 main.py <employee_id>")
+        print("Usage: python3 main_0.py <employee_id>")
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
