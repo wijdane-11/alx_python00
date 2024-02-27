@@ -18,8 +18,8 @@ Usage: python3 script.py USER_ID
 """
 
 import json
-import sys
 import requests
+import sys
 
 class TaskExporter:
     """
